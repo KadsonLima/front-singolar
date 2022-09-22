@@ -1,25 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Header from "./components/Header/Header";
+import { ThemeProvider } from "styled-components";
+import { Timeline } from "./pages/Timeline/Timeline";
+import { useState } from "react";
+import { ligthTheme, darkTheme } from "./styles/themes";
+import Global from "./styles/global";
+import { ModalPage } from "./components/DeletePost/Modal";
+import { TimelineUser } from "./pages/TimelineUsers/TimelineUsers";
 
-function App() {
+export default function App() {
+  const [theme, setTheme] = useState("light");
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const [postId, setPostId] = useState(null);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme === "light" ? ligthTheme : darkTheme}>
+    <ModalPage modalIsOpen={modalIsOpen} setIsOpen={setIsOpen} postId={postId}/>
+    <Global/>
+      <Router>
+      <Header setTheme={setTheme} theme={theme}/>
+        <Routes>
+          <Route path="/" element={<Timeline  setIsOpen={setIsOpen} setPostId={setPostId}/>} />
+          <Route path="/users/:userId" element={<TimelineUser  setIsOpen={setIsOpen} setPostId={setPostId}/>} />
+        </Routes>
+      </Router>
+    </ThemeProvider>
   );
 }
-
-export default App;
