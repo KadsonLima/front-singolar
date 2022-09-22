@@ -1,12 +1,38 @@
+import { useState } from "react";
 import styled from "styled-components";
+import { sendPost } from "../../services/posts";
 
 export default function SendPost() {
+
+  const [title, setTitle] = useState("");
+  const [tbody, setBody] = useState("");
+
+  function submit(event) {
+    event.preventDefault();
+    const body = {
+      userId:1,
+      title,
+      body:tbody,
+    };
+    const config = [
+      body,
+      { headers: { 'Content-type': 'application/json; charset=UTF-8', } } ,
+    ];
+
+    sendPost(body)
+  }
+
+
   return (
     <Container>
-      <Form>
+      <Form onSubmit={(e) => submit(e)}>
         <Title>What are you going to share today?</Title>
-        <Input placeholder="Title"></Input>
-        <StyledTextarea placeholder="Text"></StyledTextarea>
+        <Input placeholder="Title" name="title" onChange={(e) => {
+            setTitle(e.target.value);
+          }}></Input>
+        <StyledTextarea placeholder="Text" name="body" onChange={(e) => {
+            setBody(e.target.value);
+          }}></StyledTextarea>
         <Submit type="submit" value="Postar"></Submit>
       </Form>
     </Container>

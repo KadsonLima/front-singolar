@@ -3,6 +3,7 @@ import { getCommentsPost, getUserPosts, listPosts, listUsers } from "../../servi
 import { useEffect, useState } from "react";
 import DeletePost from "../DeletePost/DeletePost";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import EditPost from "../EditPost/EditPost";
 
 
 export default function Posts({setIsOpen, setPostId}) {
@@ -35,7 +36,9 @@ export default function Posts({setIsOpen, setPostId}) {
 
   }, []);
 
-  const lisPost = (posts) ? (posts.map((post, index)=>{
+  const [edit, setEdit] = useState(false);
+
+  const lisPost = (posts)&&(posts.map((post, index)=>{
 
 
 
@@ -45,14 +48,28 @@ export default function Posts({setIsOpen, setPostId}) {
       }
     })
 
-    return <Post key={index} >
+    const postEdit = (!edit)?(
+      <Post key={index} >
       <DeletePost id={post.id} setIsOpen={setIsOpen} setPostId={setPostId}/>
+      <EditPost />
       <Name to={`/users/${post.userId}`}>{userName}</Name>
       <Title>{post.title}</Title>
       <Body>{post.body}</Body>
       <Comments>Comments</Comments>
     </Post>
-  })):''
+    ):(
+      <Post key={index} >
+      <DeletePost id={post.id} setIsOpen={setIsOpen} setPostId={setPostId}/>
+      <EditPost/>
+      <Name to={`/users/${post.userId}`}>{userName}</Name>
+      <input value={post.title}></input>
+      <Body>{post.body}</Body>
+      <Comments>Comments</Comments>
+    </Post>
+    )
+
+    return postEdit
+  }))
 
   return <Container>
     {lisPost}

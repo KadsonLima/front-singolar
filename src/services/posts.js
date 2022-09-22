@@ -34,7 +34,10 @@ export async function getCommentsPost(postId) {
 
   api.get(`/posts/${postId}/comments`).then((comments)=>{
     return comments;
-  })
+  })  
+}
 
- 
+export async function sendPost(body) {
+  const response = await api.post(`/posts`, body);
+  return response.data;
 }
