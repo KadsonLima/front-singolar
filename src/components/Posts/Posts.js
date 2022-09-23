@@ -76,9 +76,10 @@ const PostComments = (({post, index, userName, setIsOpen, setPostId})=>{
   const comment = comments?.map((comment, index)=>{
 
     return (
-      <Comment>
+      <Comment key={index}>
           <Title >{comment.name}</Title>
           <Body>{post.body}</Body>
+          <Name>{comment.email}</Name>
       </Comment>
     )
   })
@@ -175,5 +176,9 @@ const Comment = styled.div`
     font-size: xx-small;
     margin-bottom: 0;
   }
-
+  a{
+    margin-top: 5px;
+    font-size: xx-small;
+    text-align: end;
+  }
 `;
