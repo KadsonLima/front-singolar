@@ -38,9 +38,7 @@ export default function Posts({setIsOpen, setPostId}) {
 
   const [edit, setEdit] = useState(false);
 
-  const lisPost = (posts)&&(posts.map((post, index)=>{
-
-
+  const LisPost =  (posts)&&(posts.map((post, index)=>{
 
     const userName = users?.map((user) =>{
       if(user.id === post.userId){
@@ -48,33 +46,57 @@ export default function Posts({setIsOpen, setPostId}) {
       }
     })
 
-    const postEdit = (!edit)?(
-      <Post key={index} >
-      <DeletePost id={post.id} setIsOpen={setIsOpen} setPostId={setPostId}/>
-      <EditPost />
-      <Name to={`/users/${post.userId}`}>{userName}</Name>
-      <Title>{post.title}</Title>
-      <Body>{post.body}</Body>
-      <Comments>Comments</Comments>
-    </Post>
-    ):(
-      <Post key={index} >
-      <DeletePost id={post.id} setIsOpen={setIsOpen} setPostId={setPostId}/>
-      <EditPost/>
-      <Name to={`/users/${post.userId}`}>{userName}</Name>
-      <input value={post.title}></input>
-      <Body>{post.body}</Body>
-      <Comments>Comments</Comments>
-    </Post>
-    )
+    
+    return <PostComments post={post} index={index} userName={userName} setIsOpen={setIsOpen} setPostId={setPostId}/>
+    
 
-    return postEdit
+    
   }))
 
   return <Container>
-    {lisPost}
+    {LisPost}
   </Container>;
 }
+
+
+const PostComments = (({post, index, userName, setIsOpen, setPostId})=>{
+
+  const [seeComment, setSeeComment] = useState(false);
+  const [comments, setComments] = useState(null);
+  
+  const changeComments = () =>{
+    setSeeComment(!seeComment)
+
+    getCommentsPost(post.id).then((comments)=>{
+      setComments(comments.data)
+    })
+    
+  }
+
+  const comment = comments?.map((comment, index)=>{
+
+    return (
+      <Comment>
+          <Title >{comment.name}</Title>
+          <Body>{post.body}</Body>
+      </Comment>
+    )
+  })
+
+  return (
+    <Post key={index} >
+      <DeletePost id={post.id} setIsOpen={setIsOpen} setPostId={setPostId}/>
+      <EditPost/>
+      <Name to={`/users/${post.userId}`}>{userName}</Name>
+      <Title >{post.title}</Title>
+      <Body>{post.body}</Body>
+      {seeComment&&comment}
+      <Comments onClick={()=>{changeComments()}}>Comments</Comments>
+    </Post>
+  )
+
+});
+
 
 const Container = styled.div`
   margin-top: 20px;
@@ -103,18 +125,20 @@ const Name = styled(Link)`
 const Body = styled.p`
   display: flex;
   width: 100%;
+  margin-bottom: 10px;
 `;
 
 const Post = styled.div`
   display: flex;
   flex-direction: column;
   max-width: 600px;
-  height: 200px;
+  min-height: 150px;
   width: 100%;
   border: 2px solid #cdcfd0;
   border-radius: 10px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   padding: 20px 20px;
+  padding-bottom: 30px;
   cursor: pointer;
   position: relative;
   z-index: 0;
@@ -136,4 +160,20 @@ const Comments = styled.p`
   bottom: -1px;
   border-radius: 0px 0px 6px 6px;
   left: -1px;
+`;
+
+const Comment = styled.div`
+  margin-bottom: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid #d3d3d3;
+  min-height: 60px;
+  padding: 10px;
+  border-radius: 6px;
+  p{
+    font-size: xx-small;
+    margin-bottom: 0;
+  }
+
 `;

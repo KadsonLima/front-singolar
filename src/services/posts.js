@@ -32,9 +32,9 @@ export async function deletePost(postId) {
 
 export async function getCommentsPost(postId) {
 
-  api.get(`/posts/${postId}/comments`).then((comments)=>{
-    return comments;
-  })  
+  const response = await api.get(`/posts/${postId}/comments`)
+  
+  return response
 }
 
 export async function sendPost(body) {
