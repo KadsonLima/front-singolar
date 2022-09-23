@@ -20,7 +20,7 @@
 ## 🎨 Layout
 
 <a href="https://front-singolar-mesa.vercel.app/">
-  <img alt="Made by kadsonlima" src="https://img.shields.io/badge/Acessar%20Aplicação">
+  <img alt="Made by kadsonlima" src="https://img.shields.io/badge/-abrir%20aplica%C3%A7%C3%A3o-success">
 </a>
 
 ### Mobile
