@@ -26,17 +26,17 @@
 ### Mobile
 
 <p align="center">
-  <img alt="front-singolar" title="#front-singolar" src="./assets/mobile.png" width="200px">
+  <img alt="front-singolar" title="#front-singolar" src="./web/mobile.png" width="200px">
 
-  <img alt="front-singolar" title="#front-singolar" src="./assets/mobileuser.png" width="200px">
+  <img alt="front-singolar" title="#front-singolar" src="./web/mobileuser.png" width="200px">
 </p>
 
 ### Web
 
 <p align="center" style="display: flex; align-items: flex-start; justify-content: center;">
-  <img alt="front-singolar" title="#front-singolar" src="./assets/web.png" width="400px">
+  <img alt="front-singolar" title="#front-singolar" src="./web/web.png" width="400px">
 
-  <img alt="front-singolar" title="#front-singolar" src="./assets/webuser.png" width="400px">
+  <img alt="front-singolar" title="#front-singolar" src="./web/webuser.png" width="400px">
 </p>
 
 ---
