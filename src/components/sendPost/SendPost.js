@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { sendPost } from "../../services/posts";
 
@@ -14,12 +15,10 @@ export default function SendPost() {
       title,
       body:tbody,
     };
-    const config = [
-      body,
-      { headers: { 'Content-type': 'application/json; charset=UTF-8', } } ,
-    ];
 
-    sendPost(body)
+    sendPost(body).then(()=>{
+      window.location.reload();
+    });
   }
 
 
@@ -27,10 +26,10 @@ export default function SendPost() {
     <Container>
       <Form onSubmit={(e) => submit(e)}>
         <Title>What are you going to share today?</Title>
-        <Input placeholder="Title" name="title" onChange={(e) => {
+        <Input placeholder="Title" name="title" required onChange={(e) => {
             setTitle(e.target.value);
           }}></Input>
-        <StyledTextarea placeholder="Text" name="body" onChange={(e) => {
+        <StyledTextarea placeholder="Text" required name="body" onChange={(e) => {
             setBody(e.target.value);
           }}></StyledTextarea>
         <Submit type="submit" value="Postar"></Submit>
@@ -65,7 +64,7 @@ const Title = styled.h3`
   margin-bottom: 20px;
 `
 
-const Input = styled.input`
+export const Input = styled.input`
   border-radius: 5px;
   height: 30px;
   width: 100%;
@@ -74,7 +73,7 @@ const Input = styled.input`
   background-color: #EFEFEF;
 
 `
-const Submit = styled.input`
+export const Submit = styled.input`
   border-radius: 5px;
   height: 30px;
   width: 100%;
@@ -89,7 +88,7 @@ const Submit = styled.input`
   }
 `
 
-const StyledTextarea = styled.textarea`
+export const StyledTextarea = styled.textarea`
   border-radius: 5px;
   width: 100%;
   height: 50px;

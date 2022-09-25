@@ -41,3 +41,9 @@ export async function sendPost(body) {
   const response = await api.post(`/posts`, body);
   return response.data;
 }
+
+export async function updatePost(body) {
+  const response = await api.put(`/posts/${body.id}`, body);
+  return response.data;
+
+}

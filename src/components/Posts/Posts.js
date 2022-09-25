@@ -1,17 +1,16 @@
 import styled from "styled-components";
-import { getCommentsPost, getUserPosts, listPosts, listUsers } from "../../services/posts";
+import { getCommentsPost, getUserPosts, listPosts, listUsers, updatePost } from "../../services/posts";
 import { useEffect, useState } from "react";
 import DeletePost from "../DeletePost/DeletePost";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import EditPost from "../EditPost/EditPost";
 
 
 export default function Posts({setIsOpen, setPostId}) {
-  const {userId}= useParams();
-  console.log("shauhdsa", userId)
+
+  const {userId} = useParams();
   const [posts, setPosts] = useState(null);
   const [users, setUsers] = useState(null);
-  const navigate = useNavigate()
 
   useEffect(() => {
     const responsePosts = listPosts();
@@ -36,7 +35,7 @@ export default function Posts({setIsOpen, setPostId}) {
 
   }, []);
 
-  const [edit, setEdit] = useState(false);
+ 
 
   const LisPost =  (posts)&&(posts.map((post, index)=>{
 
@@ -63,7 +62,24 @@ const PostComments = (({post, index, userName, setIsOpen, setPostId})=>{
 
   const [seeComment, setSeeComment] = useState(false);
   const [comments, setComments] = useState(null);
-  
+  const [edit, setEdit] = useState(false);
+  const [title, setTitle] = useState("");
+  const [tbody, setBody] = useState("");
+
+  function sendEdit(){
+    const body = {
+      id:post.id,
+      userId:post.userId,
+      title,
+      body:tbody,
+    };
+
+    updatePost(body).then(()=>{
+     setEdit(!edit)
+    });
+
+  }
+
   const changeComments = () =>{
     setSeeComment(!seeComment)
 
@@ -84,21 +100,48 @@ const PostComments = (({post, index, userName, setIsOpen, setPostId})=>{
     )
   })
 
-  return (
-    <Post key={index} >
-      <DeletePost id={post.id} setIsOpen={setIsOpen} setPostId={setPostId}/>
-      <EditPost/>
-      <Name to={`/users/${post.userId}`}>{userName}</Name>
-      <Title >{post.title}</Title>
-      <Body>{post.body}</Body>
-      {seeComment&&comment}
-      <Comments onClick={()=>{changeComments()}}>Comments</Comments>
-    </Post>
-  )
+  const postDefault = <Post key={index} >
+    <DeletePost id={post.id} setIsOpen={setIsOpen} setPostId={setPostId}/>
+    <EditPost edit={edit} setEdit={setEdit} />
+    <Name to={`/users/${post.userId}`}>{userName}</Name>
+    <Title >{post.title}</Title>
+    <Body>{post.body}</Body>
+    {seeComment&&comment}
+    <Comments onClick={()=>{changeComments()}}>Comments</Comments>
+  </Post>
+
+  const postEditable = <Post key={index} >
+    <DeletePost id={post.id} setIsOpen={setIsOpen} setPostId={setPostId}/>
+    <EditPost edit={edit} setEdit={setEdit} />
+    <Name to={`/users/${post.userId}`}>{userName}</Name>
+    <input name="title" defaultValue={post.title} onChange={(e) => {
+            setTitle(e.target.value);
+          }}></input>
+    <textarea defaultValue={post.body} onChange={(e) => {
+            setBody(e.target.value);
+          }}></textarea>
+    <Button onClick={()=>{sendEdit()}}>Editar</Button>
+    {seeComment&&comment}
+    <Comments onClick={()=>{changeComments()}}>Comments</Comments>
+  </Post>
+
+  const editable = (!edit) ? (postDefault) : (postEditable)
+
+  return editable
 
 });
 
-
+const Button = styled.button`
+  width: 20%;
+  height: 30px;
+  margin-bottom: 5px;
+  color: white;
+  border: none;
+  background-color: green;
+  cursor: pointer;
+  font-weight: 700;
+  border-radius: 5px;
+`
 const Container = styled.div`
   margin-top: 20px;
   display: flex;
@@ -144,8 +187,15 @@ const Post = styled.div`
   position: relative;
   z-index: 0;
 
-  &&:hover{
-    filter: contrast(0.4);
+
+  input{
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  textarea{
+    width: 100%;
+  margin-bottom: 10px;
+  height: 100px;
   }
 `;
 
@@ -180,5 +230,6 @@ const Comment = styled.div`
     margin-top: 5px;
     font-size: xx-small;
     text-align: end;
+    
   }
 `;
